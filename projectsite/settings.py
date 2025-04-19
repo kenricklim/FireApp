@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "fire",
     "widget_tweaks",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
