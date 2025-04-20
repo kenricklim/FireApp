@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -27,6 +29,7 @@
       </li>
     </ul>
   </div>
+
   <div class="row">
     <div class="col-md-12">
       <div class="card card-transparent">
@@ -46,50 +49,47 @@
     </div>
   </div>
 </div>
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
   var map = L.map('map').setView([9.81644, 118.72239], 13);
+
+  // Corrected image path using Django's static tag
   var truckIcon = L.icon({
-  iconUrl: '../static/img/firetruck.png', // Replace with the path to your red marker icon
-  iconSize: [50, 50], // Adjust the size as needed
+    iconUrl: "{% static 'img/firetruck.png' %}",
+    iconSize: [50, 50], // Adjust the size as needed
   });
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-
 
   // Create an array to hold all the markers
   var markers = [];
 
-  // Define the marker data
+  // Define the marker data passed from views
   var markerData = {{ fireStations|safe }};
 
   // Loop through the marker data and create markers
   markerData.forEach(function (data) {
-      var latitude = parseFloat(data.latitude);
-      var longitude = parseFloat(data.longitude);
+    var latitude = parseFloat(data.latitude);
+    var longitude = parseFloat(data.longitude);
 
-      var marker = L.marker([latitude, longitude], { icon: truckIcon }).addTo(map);
+    var marker = L.marker([latitude, longitude], { icon: truckIcon }).addTo(map);
 
-      // Create a popup and set its content
-      var popupContent = data.name;
-      var popup = L.popup().setContent(popupContent);
+    var popupContent = data.name;
 
-      marker.bindPopup(popupContent);
+    marker.bindPopup(popupContent);
 
+    marker.on('mouseover', function () {
+      this.openPopup();
+    });
 
-      // Bind mouseover and mouseout events to the marker
-      marker.on('mouseover', function (e) {
-          this.openPopup();
-      });
+    marker.on('mouseout', function () {
+      this.closePopup();
+    });
 
-      marker.on('mouseout', function (e) {
-          this.closePopup();
-      });
-
-      // Add the marker to the markers array
-      markers.push(marker);
+    markers.push(marker);
   });
 </script>
 {% endblock %}

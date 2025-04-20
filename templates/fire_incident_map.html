@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    .map-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        align-items: center;
+    }
+
+    #city-select {
+        width: 200px;
+        padding: 8px;
+        border-radius: 6px;
+        border: 2px solid #6c17eb;
+    }
+
+    #goButton {
+        padding: 8px 16px;
+        background-color: #6c17eb;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    #map {
+        width: 100%;
+        height: 65vh;
+        border-radius: 8px;
+        border: 2px solid #6c17eb;
+    }
+</style>
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Fire Incidents Map</h4>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title text-center">Fire Incidents</h4>
+            <p class="card-category text-center">Visualize fire incidents by city.</p>
+        </div>
+        <div class="card-body">
+            <div class="map-controls">
+                <select id="city-select">
+                    <option value="" selected disabled>Select City</option>
+                </select>
+                <button id="goButton">Go</button>
+            </div>
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([9.81644, 118.72239], 13);
+    var fireIcon = L.icon({
+        iconUrl: "{% static 'img/fireheart.png' %}",
+        iconSize: [50, 50],
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var markerData = {{ fireIncidents|safe }};
+    var markers = [];
+
+    markerData.forEach(function(data) {
+        var lat = parseFloat(data.latitude);
+        var lng = parseFloat(data.longitude);
+        var marker = L.marker([lat, lng], { icon: fireIcon }).addTo(map);
+        marker.bindPopup(data.name);
+        marker.on('mouseover', function() { this.openPopup(); });
+        marker.on('mouseout', function() { this.closePopup(); });
+        markers.push(marker);
+    });
+
+    function populateDropdown() {
+        var select = document.getElementById("city-select");
+        markerData.forEach(function(data) {
+            var option = document.createElement("option");
+            option.value = data.name;
+            option.textContent = data.name;
+            select.appendChild(option);
+        });
+    }
+
+    document.getElementById("goButton").addEventListener("click", function () {
+        var selectedName = document.getElementById("city-select").value;
+        var selected = markerData.find(obj => obj.name === selectedName);
+        if (selected) {
+            map.setView([parseFloat(selected.latitude), parseFloat(selected.longitude)], 13);
+        }
+    });
+
+    populateDropdown();
+</script>
+
+{% endblock %}
