@@ -72,7 +72,6 @@ def LineCountbyMonth(request):
 
 # Chart Data: Multi-Line for Top 3 Countries
 def MultilineIncidentTop3Country(request):
-
     query = '''
     SELECT 
         fl.country,
@@ -107,20 +106,30 @@ def MultilineIncidentTop3Country(request):
 
     with connection.cursor() as cursor:
         cursor.execute(query)
-        print(cursor.fetchall())
+        rows = cursor.fetchall()  # ACTUALLY STORE THE RESULTS
 
-    months = set(str(i).zfill(2) for i in range(1, 13))
+    months = [str(i) for i in range(1, 13)]  # Single-digit month keys
     result = {}
 
     for country, month, count in rows:
+        # Convert two-digit month to single-digit
+        month = str(int(month))  # '01' → '1', '12' → '12'
+        country = country or f"Country {len(result) + 1}"  # Handle nulls
+        
         if country not in result:
             result[country] = {m: 0 for m in months}
+        
         result[country][month] = count
 
+    # Ensure exactly 3 countries
     while len(result) < 3:
-        result[f"Country {len(result) + 1}"] = {m: 0 for m in months}
+        dummy_country = f"Country {len(result) + 1}"
+        result[dummy_country] = {m: 0 for m in months}
 
-    return JsonResponse({k: dict(sorted(v.items())) for k, v in result.items()})
+    return JsonResponse({
+        country: {month: data[month] for month in months} 
+        for country, data in result.items()
+    })
 
 
 # Chart Data: Multiple Bars by Severity per Month
