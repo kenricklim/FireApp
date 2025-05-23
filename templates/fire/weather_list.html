@@ -1,0 +1,47 @@
+{% extends 'fire/base_list.html' %}
+
+{% block title %}Weather Conditions{% endblock %}
+
+{% block table_content %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Station</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Wind Speed</th>
+            <th>Wind Direction</th>
+            <th>Precipitation</th>
+            <th>Description</th>
+            <th>Recorded At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for weather in weather_conditions %}
+        <tr>
+            <td>{{ weather.station.name }}</td>
+            <td>{{ weather.temperature }}°C</td>
+            <td>{{ weather.humidity }}%</td>
+            <td>{{ weather.wind_speed }} km/h</td>
+            <td>{{ weather.wind_direction }}</td>
+            <td>{{ weather.precipitation }} mm</td>
+            <td>{{ weather.weather_description }}</td>
+            <td>{{ weather.recorded_at }}</td>
+            <td>
+                <a href="{% url 'weather_edit' weather.pk %}" class="btn btn-sm btn-info">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'weather_delete' weather.pk %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" class="text-center">No weather conditions found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

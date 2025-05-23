@@ -1,0 +1,43 @@
+{% extends 'fire/base_list.html' %}
+
+{% block title %}Fire Trucks{% endblock %}
+
+{% block table_content %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Truck Number</th>
+            <th>Type</th>
+            <th>Station</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Last Maintenance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for truck in trucks %}
+        <tr>
+            <td>{{ truck.truck_number }}</td>
+            <td>{{ truck.get_truck_type_display }}</td>
+            <td>{{ truck.station.name }}</td>
+            <td>{{ truck.capacity }} gallons</td>
+            <td>{{ truck.status }}</td>
+            <td>{{ truck.last_maintenance }}</td>
+            <td>
+                <a href="{% url 'truck_edit' truck.pk %}" class="btn btn-sm btn-info">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'truck_delete' truck.pk %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">No fire trucks found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

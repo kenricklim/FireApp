@@ -1,6 +1,6 @@
-from django.forms import ModelForm
 from django import forms
-from .models import Locations, Incident, FireStation, WeatherConditions, FireTruck, Firefighters
+from django.forms import ModelForm
+from .models import Locations, Incident, FireStation, WeatherCondition, FireTruck, FireFighter
 
 
 class LocationForm(ModelForm):
@@ -26,19 +26,19 @@ class FireStationzForm(ModelForm):
         fields = "__all__"
 
 
-class Weather_condition(ModelForm):
+class WeatherConditionForm(ModelForm):
     class Meta:
-        model = WeatherConditions
+        model = WeatherCondition
         fields = "__all__"
 
 
-class Firetruckform(ModelForm):
+class FireTruckForm(ModelForm):
     class Meta:
         model = FireTruck
         fields = "__all__"
 
 
-class FirefightersForm(forms.ModelForm):
+class FireFighterForm(forms.ModelForm):
     class Meta:
-        model = Firefighters
+        model = FireFighter
         fields = "__all__" 

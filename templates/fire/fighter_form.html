@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% if fighter %}Edit{% else %}Add New{% endif %} Fire Fighter</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ fighter.first_name|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ fighter.last_name|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">Rank</label>
+                            <select name="rank" id="rank" class="form-control" required>
+                                <option value="">Select Rank</option>
+                                <option value="Chief" {% if fighter and fighter.rank == 'Chief' %}selected{% endif %}>Chief</option>
+                                <option value="Captain" {% if fighter and fighter.rank == 'Captain' %}selected{% endif %}>Captain</option>
+                                <option value="Lieutenant" {% if fighter and fighter.rank == 'Lieutenant' %}selected{% endif %}>Lieutenant</option>
+                                <option value="Firefighter" {% if fighter and fighter.rank == 'Firefighter' %}selected{% endif %}>Firefighter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="station">Station</label>
+                            <select class="form-control" id="station" name="station" required>
+                                <option value="">Select Station</option>
+                                {% for station in stations %}
+                                <option value="{{ station.id }}" {% if fighter.station_id == station.id %}selected{% endif %}>{{ station.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact_number">Contact Number</label>
+                            <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ fighter.contact_number|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ fighter.email|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date_joined">Date Joined</label>
+                            <input type="date" class="form-control" id="date_joined" name="date_joined" value="{{ fighter.date_joined|date:'Y-m-d'|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="{% url 'fighter_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

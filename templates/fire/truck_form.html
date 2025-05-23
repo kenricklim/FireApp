@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% if truck %}Edit{% else %}Add New{% endif %} Fire Truck</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="truck_number">Truck Number</label>
+                            <input type="text" class="form-control" id="truck_number" name="truck_number" value="{{ truck.truck_number|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="truck_type">Truck Type</label>
+                            <select name="truck_type" id="truck_type" class="form-control" required>
+                                <option value="">Select Truck Type</option>
+                                <option value="Pumper" {% if truck and truck.truck_type == 'Pumper' %}selected{% endif %}>Pumper</option>
+                                <option value="Tanker" {% if truck and truck.truck_type == 'Tanker' %}selected{% endif %}>Tanker</option>
+                                <option value="Ladder" {% if truck and truck.truck_type == 'Ladder' %}selected{% endif %}>Ladder</option>
+                                <option value="Rescue" {% if truck and truck.truck_type == 'Rescue' %}selected{% endif %}>Rescue</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="station">Station</label>
+                            <select class="form-control" id="station" name="station" required>
+                                <option value="">Select Station</option>
+                                {% for station in stations %}
+                                <option value="{{ station.id }}" {% if truck.station_id == station.id %}selected{% endif %}>{{ station.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="capacity">Water Capacity (gallons)</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity" value="{{ truck.capacity|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="Available" {% if truck.status == 'Available' %}selected{% endif %}>Available</option>
+                                <option value="In Use" {% if truck.status == 'In Use' %}selected{% endif %}>In Use</option>
+                                <option value="Maintenance" {% if truck.status == 'Maintenance' %}selected{% endif %}>Maintenance</option>
+                                <option value="Out of Service" {% if truck.status == 'Out of Service' %}selected{% endif %}>Out of Service</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_maintenance">Last Maintenance Date</label>
+                            <input type="date" class="form-control" id="last_maintenance" name="last_maintenance" value="{{ truck.last_maintenance|date:'Y-m-d'|default:'' }}" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="{% url 'truck_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,43 @@
+{% extends 'fire/base_list.html' %}
+
+{% block title %}Fire Fighters{% endblock %}
+
+{% block table_content %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Rank</th>
+            <th>Station</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Date Joined</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fighter in fighters %}
+        <tr>
+            <td>{{ fighter.first_name }} {{ fighter.last_name }}</td>
+            <td>{{ fighter.get_rank_display }}</td>
+            <td>{{ fighter.station.name }}</td>
+            <td>{{ fighter.contact_number }}</td>
+            <td>{{ fighter.email }}</td>
+            <td>{{ fighter.date_joined }}</td>
+            <td>
+                <a href="{% url 'fighter_edit' fighter.pk %}" class="btn btn-sm btn-info">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'fighter_delete' fighter.pk %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">No fire fighters found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

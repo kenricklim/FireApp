@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">{% if form.instance.pk %}Edit{% else %}Add{% endif %} Weather Condition</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_station" class="form-label">Station</label>
+                            <select name="station" id="id_station" class="form-select" required>
+                                <option value="">Select a station</option>
+                                {% for station in stations %}
+                                <option value="{{ station.id }}" {% if form.instance.station_id == station.id %}selected{% endif %}>
+                                    {{ station.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_temperature" class="form-label">Temperature (°C)</label>
+                            <input type="number" name="temperature" id="id_temperature" class="form-control" step="0.1" required
+                                value="{{ form.instance.temperature|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_humidity" class="form-label">Humidity (%)</label>
+                            <input type="number" name="humidity" id="id_humidity" class="form-control" required
+                                value="{{ form.instance.humidity|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_wind_speed" class="form-label">Wind Speed (km/h)</label>
+                            <input type="number" name="wind_speed" id="id_wind_speed" class="form-control" required
+                                value="{{ form.instance.wind_speed|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_wind_direction" class="form-label">Wind Direction</label>
+                            <input type="text" name="wind_direction" id="id_wind_direction" class="form-control" required
+                                value="{{ form.instance.wind_direction|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_precipitation" class="form-label">Precipitation (mm)</label>
+                            <input type="number" name="precipitation" id="id_precipitation" class="form-control" step="0.1" required
+                                value="{{ form.instance.precipitation|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_weather_description" class="form-label">Weather Description</label>
+                            <textarea name="weather_description" id="id_weather_description" class="form-control" rows="3" required>{{ form.instance.weather_description|default:'' }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_recorded_at" class="form-label">Recorded At</label>
+                            <input type="datetime-local" name="recorded_at" id="id_recorded_at" class="form-control" required
+                                value="{{ form.instance.recorded_at|date:'Y-m-d\TH:i'|default:'' }}">
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="{% url 'weather_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

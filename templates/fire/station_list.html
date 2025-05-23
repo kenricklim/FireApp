@@ -1,0 +1,39 @@
+{% extends 'fire/base_list.html' %}
+
+{% block title %}Fire Stations{% endblock %}
+
+{% block table_content %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for station in stations %}
+        <tr>
+            <td>{{ station.name }}</td>
+            <td>{{ station.address }}</td>
+            <td>{{ station.city }}</td>
+            <td>{{ station.latitude }}, {{ station.longitude }}</td>
+            <td>
+                <a href="{% url 'station_edit' station.pk %}" class="btn btn-sm btn-info">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'station_delete' station.pk %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No fire stations found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 
