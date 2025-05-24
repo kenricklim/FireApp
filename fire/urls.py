@@ -5,8 +5,14 @@ urlpatterns = [
     # Existing URLs
     path('', views.HomePageView.as_view(), name='index'),
     path('maps/', views.maps, name='maps'),
-    path('charts/', views.dashboard_chart, name='charts'),
+    path('charts/', views.ChartView.as_view(), name='charts'),
     path('widgets/', views.widgets, name='widgets'),
+    
+    # Chart Data URLs
+    path('chart/pie/severity/', views.PieCountbySeverity, name='pie_chart_data'),
+    path('chart/line/month/', views.LineCountbyMonth, name='line_chart_data'),
+    path('chart/multiline/top3/', views.MultilineIncidentTop3Country, name='multiline_chart_data'),
+    path('chart/multibar/severity/', views.multipleBarbySeverity, name='multibar_chart_data'),
     
     # Fire Station URLs
     path('stations/', views.FireStationListView.as_view(), name='station_list'),

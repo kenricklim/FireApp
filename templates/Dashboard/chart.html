@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-<h1>Dashboard</h1>
-<p>This is the dashboard page</p>
+{% include 'includes/charts_content.html' %}
 {% endblock %}
+
+{% block chart %}
+<!-- Chart scripts are included in the shared file -->
+{% endblock %} 

@@ -36,13 +36,19 @@ def widgets(request):
 # Chart Page View
 class ChartView(ListView):
     template_name = 'chart.html'
+    model = Incident
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['title'] = 'Charts'
+        context['total_incidents'] = Incident.objects.count()
+        context['total_stations'] = FireStation.objects.count()
+        context['total_fighters'] = FireFighter.objects.count()
+        context['total_trucks'] = FireTruck.objects.count()
         return context
 
     def get_queryset(self, *args, **kwargs):
-        pass
+        return Incident.objects.all()
 
 
 # Chart Data: Pie by Severity Level
