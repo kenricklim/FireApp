@@ -408,12 +408,13 @@ class FireStationUpdateView(UpdateView):
 class FireStationDeleteView(DeleteView):
     model = FireStation
     template_name= 'station_del.html'
-    success_url = reverse_lazy('station-list')
+    success_url = reverse_lazy('station_list')
     
     def form_valid(self, form):
-        station_name = form.instance.name
+        station_name = self.object.name
+        response = super().form_valid(form)
         messages.success(self.request, f'Fire Station "{station_name}" deleted successfully!')
-        return super().form_valid(form)
+        return response
 
 def dashboard_chart(request):
     context = {
