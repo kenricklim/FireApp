@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     
     # Weather Condition URLs
     path('weather/', views.weather_list, name='weather_list'),
+    path('weather/conditions/', views.weather_list, name='weather_conditions'),
     path('weather/create/', views.weather_create, name='weather_create'),
     path('weather/<int:pk>/edit/', views.weather_edit, name='weather_edit'),
     path('weather/<int:pk>/delete/', views.weather_delete, name='weather_delete'),

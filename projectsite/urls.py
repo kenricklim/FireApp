@@ -77,6 +77,7 @@ urlpatterns = [
 
     # Weather Condition URLs
     path('weather/', weather_list, name='weather_list'),
+    path('weather/conditions/', weather_list, name='weather_conditions'),
     path('weather/create/', weather_create, name='weather_create'),
     path('weather/<int:pk>/edit/', weather_edit, name='weather_edit'),
     path('weather/<int:pk>/delete/', weather_delete, name='weather_delete'),
